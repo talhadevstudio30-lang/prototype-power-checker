@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobile Capacity Check App</title>
+    <title>Advanced Mobile Capacity Check</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -12,20 +12,20 @@
             font-family: 'Poppins', sans-serif;
         }
         .gradient-bg {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
         }
         .card-gradient {
-            background: linear-gradient(145deg, #ffffff, #f0f0f0);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.08);
         }
         .btn-gradient {
             background: linear-gradient(to right, #4776E6, #8E54E9);
-            box-shadow: 0 4px 15px rgba(142, 84, 233, 0.4);
+            box-shadow: 0 4px 20px rgba(142, 84, 233, 0.4);
             transition: all 0.3s ease;
         }
         .btn-gradient:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(142, 84, 233, 0.6);
+            box-shadow: 0 6px 25px rgba(142, 84, 233, 0.6);
         }
         .progress-gradient {
             background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
@@ -47,387 +47,859 @@
             100% { transform: translateY(0px); }
         }
         .stats-card {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .performance-ring {
+            transition: stroke-dashoffset 0.5s ease;
+        }
+        .heat-map {
+            background: linear-gradient(90deg, #00ff00, #ffff00, #ff0000);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body class="gradient-bg min-h-screen flex flex-col items-center justify-center p-4">
-    <div class="w-full max-w-lg">
+    <div class="w-full max-w-4xl">
         <!-- Header Section -->
         <div class="text-center mb-8 floating">
-            <div class="inline-block p-4 bg-white rounded-full mb-4 shadow-lg">
-                <i class="fas fa-mobile-alt text-4xl text-purple-600"></i>
+            <div class="inline-block p-4 bg-gradient-to-r from-purple-600 to-blue-500 rounded-full mb-4 shadow-lg">
+                <i class="fas fa-microchip text-4xl text-white"></i>
             </div>
-            <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">Mobile Capacity Check</h1>
-            <p class="text-white opacity-90 max-w-md mx-auto">Test your device's processing power with our performance benchmark tool</p>
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">Advanced Capacity Benchmark</h1>
+            <p class="text-white opacity-90 max-w-md mx-auto">Precise device performance measurement with multi-core testing</p>
         </div>
 
-        <!-- Main Card -->
-        <div class="card-gradient rounded-2xl p-6 md:p-8 mb-6">
-            <!-- Input Section -->
-            <div class="mb-8">
-                <div class="flex items-center mb-4">
-                    <div class="bg-purple-100 p-2 rounded-lg mr-3">
-                        <i class="fas fa-sliders-h text-purple-600"></i>
+        <div class="flex flex-col lg:flex-row gap-6">
+            <!-- Main Control Card -->
+            <div class="card-gradient rounded-2xl p-6 md:p-8 flex-1">
+                <!-- Test Configuration -->
+                <div class="mb-8">
+                    <div class="flex items-center mb-6">
+                        <div class="bg-gradient-to-r from-purple-100 to-blue-100 p-3 rounded-lg mr-4">
+                            <i class="fas fa-cogs text-purple-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-800">Test Configuration</h2>
+                            <p class="text-sm text-gray-600">Adjust parameters for precision testing</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Test Type Selection -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Test Type</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button id="quickTest" class="test-type-btn active bg-purple-100 text-purple-700 border-2 border-purple-300 py-3 rounded-lg font-medium transition-all">
+                                <i class="fas fa-bolt mr-2"></i>Quick Test
+                            </button>
+                            <button id="fullTest" class="test-type-btn bg-gray-100 text-gray-700 border-2 border-gray-200 py-3 rounded-lg font-medium transition-all">
+                                <i class="fas fa-tachometer-alt mr-2"></i>Full Benchmark
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Iteration Control -->
+                    <div class="mb-8">
+                        <div class="flex justify-between items-center mb-3">
+                            <label class="text-sm font-semibold text-gray-700">Iteration Count</label>
+                            <span id="iterationLabel" class="text-lg font-bold text-purple-700">1,000,000</span>
+                        </div>
+                        
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-minus text-gray-500 mr-3 cursor-pointer" id="decreaseIterations"></i>
+                            <input id="loopValue" type="range" min="100000" max="100000000" value="1000000" step="100000" class="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gradient-to-r [&::-webkit-slider-thumb]:from-purple-600 [&::-webkit-slider-thumb]:to-blue-500 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-lg">
+                            <i class="fas fa-plus text-gray-500 ml-3 cursor-pointer" id="increaseIterations"></i>
+                        </div>
+                        
+                        <div class="flex justify-between text-xs text-gray-500 mt-1">
+                            <span>Light (100K)</span>
+                            <span>Moderate (5M)</span>
+                            <span>Heavy (100M)</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Additional Options -->
+                    <div class="mb-8">
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">Advanced Options</label>
+                        <div class="space-y-3">
+                            <label class="flex items-center">
+                                <input type="checkbox" id="multiCoreTest" class="mr-3 h-5 w-5 text-purple-600 rounded" checked>
+                                <span class="text-gray-700">Enable Multi-core Testing</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" id="memoryTest" class="mr-3 h-5 w-5 text-purple-600 rounded" checked>
+                                <span class="text-gray-700">Include Memory Benchmark</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" id="floatTest" class="mr-3 h-5 w-5 text-purple-600 rounded">
+                                <span class="text-gray-700">Floating-point Precision Test</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Start Button -->
+                    <button id="startBtn" class="btn-gradient w-full py-4 rounded-xl text-white font-bold text-lg mb-6 pulse relative overflow-hidden">
+                        <span class="relative z-10">
+                            <i class="fas fa-play-circle mr-2"></i> Start Advanced Benchmark
+                        </span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full" id="buttonShine"></div>
+                    </button>
+                    
+                    <!-- Progress Section -->
+                    <div id="progressContainer" class="hidden">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-gray-700 font-medium">Processing Progress</span>
+                            <span id="progressPercent" class="font-bold text-purple-700 text-lg">0%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3 mb-6 overflow-hidden">
+                            <div id="progressBar" class="progress-gradient h-3 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                        
+                        <!-- Test Phase Indicator -->
+                        <div id="testPhase" class="text-center text-sm font-medium text-purple-600 mb-4">
+                            Initializing test...
+                        </div>
+                        
+                        <!-- Real-time Stats -->
+                        <div class="grid grid-cols-3 gap-3 mb-6">
+                            <div class="stats-card rounded-xl p-3 text-center">
+                                <div class="text-xs text-gray-600 mb-1">Time</div>
+                                <div class="text-lg font-bold text-gray-800">
+                                    <span id="timerValue">0.00</span><span class="text-sm">s</span>
+                                </div>
+                            </div>
+                            <div class="stats-card rounded-xl p-3 text-center">
+                                <div class="text-xs text-gray-600 mb-1">Ops/sec</div>
+                                <div class="text-lg font-bold text-gray-800">
+                                    <span id="opsPerSecond">0</span>
+                                </div>
+                            </div>
+                            <div class="stats-card rounded-xl p-3 text-center">
+                                <div class="text-xs text-gray-600 mb-1">CPU Load</div>
+                                <div class="text-lg font-bold text-gray-800">
+                                    <span id="cpuLoad">0</span><span class="text-sm">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Results Card -->
+            <div class="card-gradient rounded-2xl p-6 md:p-8 flex-1">
+                <div class="flex items-center mb-6">
+                    <div class="bg-gradient-to-r from-green-100 to-emerald-100 p-3 rounded-lg mr-4">
+                        <i class="fas fa-chart-line text-green-600 text-xl"></i>
                     </div>
                     <div>
-                        <label for="loopValue" class="block text-lg font-semibold text-gray-800">Iteration Count</label>
-                        <p class="text-sm text-gray-600">Higher values test more intensive processing</p>
+                        <h2 class="text-xl font-bold text-gray-800">Performance Results</h2>
+                        <p class="text-sm text-gray-600">Detailed benchmark analysis</p>
                     </div>
                 </div>
                 
-                <div class="flex items-center">
-                    <input id="loopValue" type="range" min="1000" max="10000000000" value="1000000" step="1000" class="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-purple-600 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-lg">
-                    <div class="ml-4">
-                        <input id="loopValueDisplay" type="number" min="1000" max="10000000000" value="1000000" class="w-32 px-4 py-3 text-center border-2 border-purple-200 rounded-xl font-bold text-purple-700 focus:outline-none focus:border-purple-500">
-                    </div>
-                </div>
-                
-                <div class="flex justify-between mt-2 text-sm text-gray-600">
-                    <span>(Light)</span>
-                    <span>(Medium)</span>
-                    <span>(Heavy)</span>
-                </div>
-            </div>
-            
-            <!-- Start Button -->
-            <button id="startBtn" class="btn-gradient w-full py-4 rounded-xl text-white font-bold text-lg mb-8 pulse">
-                <i class="fas fa-play-circle mr-2"></i> Start Capacity Check
-            </button>
-            
-            <!-- Progress Section -->
-            <div id="progressContainer" class="hidden">
-                <div class="flex justify-between items-center mb-3">
-                    <span class="text-gray-700 font-medium">Processing Progress</span>
-                    <span id="progressPercent" class="font-bold text-purple-700 text-lg">0%</span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-4 mb-6 overflow-hidden">
-                    <div id="progressBar" class="progress-gradient h-4 rounded-full transition-all duration-300" style="width: 0%"></div>
-                </div>
-                
-                <!-- Timer & Stats -->
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div class="stats-card rounded-xl p-4 text-center">
-                        <div class="text-sm text-gray-600 mb-1">Elapsed Time</div>
-                        <div class="text-2xl font-bold text-gray-800">
-                            <span id="timerValue">0</span><span class="text-lg">s</span>
+                <!-- Performance Score -->
+                <div id="resultContainer" class="hidden fade-in">
+                    <div class="text-center mb-8">
+                        <div class="inline-block relative">
+                            <svg class="w-32 h-32" viewBox="0 0 120 120">
+                                <circle cx="60" cy="60" r="54" fill="none" stroke="#e5e7eb" stroke-width="12"/>
+                                <circle id="scoreRing" class="performance-ring" cx="60" cy="60" r="54" fill="none" stroke="url(#gradient)" stroke-width="12" stroke-linecap="round" transform="rotate(-90 60 60)" stroke-dasharray="339.292" stroke-dashoffset="339.292"/>
+                                <defs>
+                                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#4facfe"/>
+                                        <stop offset="100%" stop-color="#00f2fe"/>
+                                    </linearGradient>
+                                </defs>
+                                <text x="60" y="65" text-anchor="middle" font-size="24" font-weight="bold" fill="#1f2937" id="scoreText">0</text>
+                            </svg>
                         </div>
+                        <h3 class="text-xl font-bold text-gray-800 mt-4" id="resultTitle">Performance Score</h3>
+                        <p class="text-gray-600 text-sm mt-2" id="resultSubtitle">Calculating...</p>
                     </div>
-                    <div class="stats-card rounded-xl p-4 text-center">
-                        <div class="text-sm text-gray-600 mb-1">Iterations/sec</div>
-                        <div class="text-2xl font-bold text-gray-800">
-                            <span id="iterationsPerSecond">0</span>
+                    
+                    <!-- Detailed Results -->
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                <span>CPU Performance</span>
+                                <span id="cpuScore">0 pts</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div id="cpuBar" class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style="width: 0%"></div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                
-                <!-- Status Indicator -->
-                <div id="statusIndicator" class="flex items-center justify-center p-3 bg-blue-50 rounded-lg mb-6 hidden">
-                    <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600 mr-3"></div>
-                    <span class="text-blue-700 font-medium">Processing intensive calculations...</span>
-                </div>
-            </div>
-            
-            <!-- Result Display -->
-            <div id="resultContainer" class="hidden">
-                <div class="bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 p-4 rounded-r-lg">
-                    <div class="flex">
-                        <div class="flex-shrink-0 text-green-500 mt-1">
-                            <i class="fas fa-check-circle text-xl"></i>
+                        
+                        <div>
+                            <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                <span>Memory Speed</span>
+                                <span id="memoryScore">0 pts</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div id="memoryBar" class="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full" style="width: 0%"></div>
+                            </div>
                         </div>
-                        <div class="ml-3">
-                            <h3 class="text-lg font-semibold text-green-800" id="resultTitle">Test Complete!</h3>
-                            <div class="mt-1 text-green-700">
-                                <p id="resultText"></p>
+                        
+                        <div>
+                            <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                <span>Multi-core Efficiency</span>
+                                <span id="multicoreScore">0%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div id="multicoreBar" class="bg-gradient-to-r from-orange-500 to-yellow-500 h-2 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Detailed Stats -->
+                        <div class="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-gray-200">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-gray-800" id="totalIterations">0</div>
+                                <div class="text-xs text-gray-600">Total Operations</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-gray-800" id="totalTime">0.00s</div>
+                                <div class="text-xs text-gray-600">Total Time</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Performance Rating -->
+                        <div id="performanceRating" class="mt-6 p-4 rounded-lg bg-gradient-to-r from-gray-50 to-gray-100 hidden">
+                            <div class="flex items-center">
+                                <div id="ratingIcon" class="text-2xl mr-3">
+                                    <i class="fas fa-medal text-yellow-500"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800" id="ratingTitle">Rating</h4>
+                                    <p class="text-sm text-gray-600" id="ratingDescription">Description</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="mt-6 p-4 bg-gray-50 rounded-xl">
-                    <h4 class="font-semibold text-gray-800 mb-3">Performance Summary</h4>
-                    <div class="space-y-3">
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">Total Iterations</span>
-                            <span class="font-semibold" id="totalIterations">0</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">Total Time</span>
-                            <span class="font-semibold" id="totalTime">0s</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">Performance Score</span>
-                            <span class="font-bold text-purple-700" id="performanceScore">0</span>
-                        </div>
+                <!-- Initial State -->
+                <div id="initialState" class="text-center py-12">
+                    <div class="text-gray-400 mb-4">
+                        <i class="fas fa-chart-bar text-5xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Results Awaiting</h3>
+                    <p class="text-gray-500 text-sm">Run a benchmark test to see detailed performance metrics</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Device Info -->
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                <div class="flex items-center">
+                    <i class="fas fa-microchip text-yellow-300 text-lg mr-3"></i>
+                    <div>
+                        <h3 class="font-semibold text-white">Processor Cores</h3>
+                        <p class="text-white/80 text-sm" id="coreCount">Detecting...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                <div class="flex items-center">
+                    <i class="fas fa-memory text-yellow-300 text-lg mr-3"></i>
+                    <div>
+                        <h3 class="font-semibold text-white">Memory</h3>
+                        <p class="text-white/80 text-sm" id="memoryInfo">Detecting...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                <div class="flex items-center">
+                    <i class="fas fa-battery-full text-yellow-300 text-lg mr-3"></i>
+                    <div>
+                        <h3 class="font-semibold text-white">Battery Status</h3>
+                        <p class="text-white/80 text-sm" id="batteryStatus">Checking...</p>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Info Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-4 text-center">
-                <i class="fas fa-bolt text-yellow-300 text-xl mb-2"></i>
-                <h3 class="font-semibold text-white">CPU Stress</h3>
-                <p class="text-white text-sm opacity-90">Tests processor performance</p>
-            </div>
-            <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-4 text-center">
-                <i class="fas fa-memory text-yellow-300 text-xl mb-2"></i>
-                <h3 class="font-semibold text-white">Memory Usage</h3>
-                <p class="text-white text-sm opacity-90">Checks RAM management</p>
-            </div>
-            <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-4 text-center">
-                <i class="fas fa-tachometer-alt text-yellow-300 text-xl mb-2"></i>
-                <h3 class="font-semibold text-white">Speed Test</h3>
-                <p class="text-white text-sm opacity-90">Measures execution speed</p>
-            </div>
-        </div>
-        
         <!-- Footer -->
-        <div class="text-center text-white opacity-80 text-sm">
-            <p>This test performs intensive calculations to measure your device's processing capacity.</p>
-            <p class="mt-1">Results may vary based on device specifications and current workload.</p>
+        <div class="text-center text-white/60 text-sm mt-8">
+            <p>This benchmark performs realistic computational tests to measure device performance.</p>
+            <p class="mt-1">Results are affected by device specifications, thermal conditions, and background processes.</p>
         </div>
     </div>
 
     <script>
+        // Enhanced Benchmark Class
+        class AdvancedBenchmark {
+            constructor() {
+                this.results = {
+                    cpuScore: 0,
+                    memoryScore: 0,
+                    multicoreScore: 0,
+                    totalTime: 0,
+                    operationsPerSecond: 0,
+                    performanceRating: '',
+                    deviceInfo: {}
+                };
+                this.isRunning = false;
+                this.startTime = 0;
+                this.progress = 0;
+            }
+            
+            // Complex mathematical computations (CPU-intensive)
+            performMathOperations(iterations) {
+                let result = 0;
+                // Prime number checking (computationally expensive)
+                for (let i = 0; i < iterations; i++) {
+                    let num = i * 1000 + 3;
+                    let isPrime = true;
+                    
+                    if (num <= 1) isPrime = false;
+                    if (num <= 3) isPrime = true;
+                    
+                    if (num % 2 === 0 || num % 3 === 0) {
+                        isPrime = false;
+                    } else {
+                        for (let j = 5; j * j <= num; j += 6) {
+                            if (num % j === 0 || num % (j + 2) === 0) {
+                                isPrime = false;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    // Floating point calculations
+                    result += Math.sin(num) * Math.cos(num) * Math.sqrt(num);
+                    result += Math.log(Math.abs(num) + 1);
+                    
+                    // Matrix multiplication simulation
+                    const size = 10;
+                    for (let x = 0; x < size; x++) {
+                        for (let y = 0; y < size; y++) {
+                            result += x * y * Math.sin(x + y);
+                        }
+                    }
+                }
+                return result;
+            }
+            
+            // Memory-intensive operations
+            performMemoryOperations(iterations) {
+                const arraySize = 10000;
+                let total = 0;
+                
+                for (let i = 0; i < iterations / 100; i++) {
+                    // Create and manipulate large arrays
+                    const arr1 = new Float64Array(arraySize);
+                    const arr2 = new Float64Array(arraySize);
+                    
+                    // Fill with random data
+                    for (let j = 0; j < arraySize; j++) {
+                        arr1[j] = Math.random();
+                        arr2[j] = Math.random();
+                    }
+                    
+                    // Perform vector operations
+                    for (let j = 0; j < arraySize; j++) {
+                        arr1[j] = arr1[j] * arr2[j] + Math.sin(arr1[j]) * Math.cos(arr2[j]);
+                        total += arr1[j];
+                    }
+                    
+                    // Sort and search
+                    arr1.sort();
+                    total += arr1[arraySize - 1];
+                    
+                    // String operations
+                    const largeString = arr1.join(',');
+                    total += largeString.length % 1000;
+                }
+                
+                return total;
+            }
+            
+            // Multi-core testing using Web Workers if available
+            async performMultiCoreTest(iterations) {
+                const workerCount = navigator.hardwareConcurrency || 4;
+                const iterationsPerWorker = Math.floor(iterations / workerCount);
+                let promises = [];
+                
+                for (let i = 0; i < Math.min(workerCount, 4); i++) {
+                    promises.push(this.runWorkerTest(iterationsPerWorker));
+                }
+                
+                const results = await Promise.all(promises);
+                return results.reduce((a, b) => a + b, 0);
+            }
+            
+            runWorkerTest(iterations) {
+                return new Promise(resolve => {
+                    let result = 0;
+                    for (let i = 0; i < iterations; i++) {
+                        // Complex calculations in worker-like manner
+                        for (let j = 0; j < 100; j++) {
+                            result += Math.sqrt(i * j) * Math.sin(i) * Math.cos(j);
+                        }
+                    }
+                    resolve(result);
+                });
+            }
+            
+            // Get device information
+            async getDeviceInfo() {
+                const info = {
+                    cores: navigator.hardwareConcurrency || 'Unknown',
+                    memory: navigator.deviceMemory || 'Unknown',
+                    userAgent: navigator.userAgent,
+                    platform: navigator.platform
+                };
+                
+                // Try to get battery info
+                if ('getBattery' in navigator) {
+                    try {
+                        const battery = await navigator.getBattery();
+                        info.battery = {
+                            level: Math.round(battery.level * 100) + '%',
+                            charging: battery.charging
+                        };
+                    } catch (e) {
+                        info.battery = { level: 'Unknown', charging: false };
+                    }
+                }
+                
+                return info;
+            }
+            
+            // Calculate performance score
+            calculateScore(cpuTime, memoryTime, opsPerSecond, deviceInfo) {
+                let score = 0;
+                
+                // CPU Score (60% weight)
+                const cpuScore = Math.max(0, 10000 - cpuTime * 100);
+                score += cpuScore * 0.6;
+                
+                // Memory Score (30% weight)
+                const memScore = Math.max(0, 5000 - memoryTime * 50);
+                score += memScore * 0.3;
+                
+                // Operations per second (10% weight)
+                const opsScore = Math.min(10000, opsPerSecond / 100);
+                score += opsScore * 0.1;
+                
+                // Adjust for device capabilities
+                if (deviceInfo.cores >= 8) score *= 1.2;
+                if (deviceInfo.cores >= 4) score *= 1.1;
+                
+                return Math.round(Math.min(10000, Math.max(0, score)));
+            }
+            
+            getRating(score) {
+                if (score >= 8000) return {
+                    title: 'Excellent',
+                    description: 'High-end device performance',
+                    icon: 'fas fa-crown',
+                    color: 'from-yellow-400 to-orange-400'
+                };
+                if (score >= 6000) return {
+                    title: 'Very Good',
+                    description: 'Above average performance',
+                    icon: 'fas fa-medal',
+                    color: 'from-purple-400 to-pink-400'
+                };
+                if (score >= 4000) return {
+                    title: 'Good',
+                    description: 'Average modern device',
+                    icon: 'fas fa-award',
+                    color: 'from-blue-400 to-cyan-400'
+                };
+                if (score >= 2000) return {
+                    title: 'Fair',
+                    description: 'Entry-level performance',
+                    icon: 'fas fa-star',
+                    color: 'from-green-400 to-emerald-400'
+                };
+                return {
+                    title: 'Basic',
+                    description: 'Low-end device',
+                    icon: 'fas fa-check-circle',
+                    color: 'from-gray-400 to-gray-500'
+                };
+            }
+        }
+
         // DOM Elements
         const startBtn = document.getElementById('startBtn');
-        const loopValueSlider = document.getElementById('loopValue');
-        const loopValueDisplay = document.getElementById('loopValueDisplay');
+        const loopValue = document.getElementById('loopValue');
+        const iterationLabel = document.getElementById('iterationLabel');
         const progressContainer = document.getElementById('progressContainer');
         const progressBar = document.getElementById('progressBar');
         const progressPercent = document.getElementById('progressPercent');
         const resultContainer = document.getElementById('resultContainer');
-        const resultText = document.getElementById('resultText');
-        const resultTitle = document.getElementById('resultTitle');
+        const initialState = document.getElementById('initialState');
         const timerValue = document.getElementById('timerValue');
-        const iterationsPerSecond = document.getElementById('iterationsPerSecond');
-        const statusIndicator = document.getElementById('statusIndicator');
+        const opsPerSecond = document.getElementById('opsPerSecond');
+        const cpuLoad = document.getElementById('cpuLoad');
+        const testPhase = document.getElementById('testPhase');
+        const scoreRing = document.getElementById('scoreRing');
+        const scoreText = document.getElementById('scoreText');
+        const cpuScore = document.getElementById('cpuScore');
+        const cpuBar = document.getElementById('cpuBar');
+        const memoryScore = document.getElementById('memoryScore');
+        const memoryBar = document.getElementById('memoryBar');
+        const multicoreScore = document.getElementById('multicoreScore');
+        const multicoreBar = document.getElementById('multicoreBar');
         const totalIterations = document.getElementById('totalIterations');
         const totalTime = document.getElementById('totalTime');
-        const performanceScore = document.getElementById('performanceScore');
+        const performanceRating = document.getElementById('performanceRating');
+        const ratingIcon = document.getElementById('ratingIcon');
+        const ratingTitle = document.getElementById('ratingTitle');
+        const ratingDescription = document.getElementById('ratingDescription');
+        const coreCount = document.getElementById('coreCount');
+        const memoryInfo = document.getElementById('memoryInfo');
+        const batteryStatus = document.getElementById('batteryStatus');
+        const buttonShine = document.getElementById('buttonShine');
 
-        // Sync slider and input display
-        loopValueSlider.addEventListener('input', () => {
-            loopValueDisplay.value = loopValueSlider.value;
-        });
+        const benchmark = new AdvancedBenchmark();
 
-        loopValueDisplay.addEventListener('input', () => {
-            let value = parseInt(loopValueDisplay.value, 10);
-            if (value < 1000) value = 1000;
-            if (value > 10000000) value = 10000000;
-            loopValueDisplay.value = value;
-            loopValueSlider.value = value;
-        });
-
-        // Start capacity check
-        startBtn.addEventListener('click', () => {
-            const loopValue = parseInt(loopValueDisplay.value, 10);
-            if (isNaN(loopValue) || loopValue < 1000) {
-                showError('Please enter a valid number greater than 1,000.');
-                return;
-            }
+        // Initialize device info
+        async function initDeviceInfo() {
+            const info = await benchmark.getDeviceInfo();
+            coreCount.textContent = `${info.cores} cores detected`;
+            memoryInfo.textContent = info.memory ? `${info.memory}GB RAM` : 'RAM info not available';
             
-            // Reset UI
+            if (info.battery) {
+                batteryStatus.textContent = `${info.battery.level} ${info.battery.charging ? '(Charging)' : ''}`;
+            }
+        }
+
+        // Update iteration label
+        function updateIterationLabel() {
+            const value = parseInt(loopValue.value);
+            iterationLabel.textContent = value.toLocaleString();
+        }
+
+        // Event Listeners
+        loopValue.addEventListener('input', updateIterationLabel);
+        
+        document.getElementById('increaseIterations').addEventListener('click', () => {
+            loopValue.value = Math.min(100000000, parseInt(loopValue.value) + 100000);
+            updateIterationLabel();
+        });
+        
+        document.getElementById('decreaseIterations').addEventListener('click', () => {
+            loopValue.value = Math.max(100000, parseInt(loopValue.value) - 100000);
+            updateIterationLabel();
+        });
+
+        // Test type selection
+        document.querySelectorAll('.test-type-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.test-type-btn').forEach(b => {
+                    b.classList.remove('active', 'bg-purple-100', 'text-purple-700', 'border-purple-300');
+                    b.classList.add('bg-gray-100', 'text-gray-700', 'border-gray-200');
+                });
+                
+                this.classList.remove('bg-gray-100', 'text-gray-700', 'border-gray-200');
+                this.classList.add('active', 'bg-purple-100', 'text-purple-700', 'border-purple-300');
+                
+                if (this.id === 'quickTest') {
+                    loopValue.value = 1000000;
+                } else {
+                    loopValue.value = 5000000;
+                }
+                updateIterationLabel();
+            });
+        });
+
+        // Start benchmark
+        startBtn.addEventListener('click', async () => {
+            if (benchmark.isRunning) return;
+            
+            benchmark.isRunning = true;
+            const iterations = parseInt(loopValue.value);
+            
+            // UI Reset
             resetUI();
             progressContainer.classList.remove('hidden');
-            statusIndicator.classList.remove('hidden');
+            initialState.classList.add('hidden');
+            resultContainer.classList.add('hidden');
+            
+            // Button state
             startBtn.disabled = true;
-            startBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
+            startBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Running Benchmark...';
             startBtn.classList.remove('pulse');
             
-            // Timer initialization
-            let elapsed = 0;
-            let lastUpdate = 0;
-            let completedIterations = 0;
-            timerValue.textContent = '0';
+            // Get device info
+            const deviceInfo = await benchmark.getDeviceInfo();
             
-            const timerInterval = setInterval(() => {
-                elapsed++;
-                timerValue.textContent = elapsed;
+            // Start timer
+            const startTime = performance.now();
+            let lastUpdate = startTime;
+            let completedOperations = 0;
+            
+            // Animation for button shine
+            buttonShine.style.animation = 'shine 2s infinite';
+            
+            // Update progress and timer
+            function updateProgress(current, total, phase) {
+                const now = performance.now();
+                const elapsed = (now - startTime) / 1000;
                 
-                // Calculate iterations per second
-                if (elapsed >= 1) {
-                    const ips = Math.round(completedIterations / elapsed);
-                    iterationsPerSecond.textContent = ips.toLocaleString();
-                }
-            }, 1000);
-            
-            // Performance measurement
-            const startTime = Date.now();
-            
-            // Process in chunks to avoid blocking UI
-            let i = 0;
-            const chunkSize = Math.ceil(loopValue / 100); // Update progress 100 times
-            
-            function processChunk() {
-                const chunkStart = Date.now();
-                const end = Math.min(i + chunkSize, loopValue);
-                
-                // Perform intensive calculations
-                for (; i < end; i++) {
-                    // Generate heavy text payload
-                    const heavyText = ('INIT: initializing subsystem; ').repeat(100) + ` #${i} ${new Date().toISOString()}`;
+                // Update every 100ms or when progress changes
+                if (now - lastUpdate >= 100 || current === total) {
+                    const percent = Math.round((current / total) * 100);
+                    progressBar.style.width = percent + '%';
+                    progressPercent.textContent = percent + '%';
                     
-                    // Generate binary data
-                    let binary = '';
-                    for (let b = 0; b < 1000; b++) {
-                        binary += String.fromCharCode((i + b) & 0xff);
+                    timerValue.textContent = elapsed.toFixed(2);
+                    
+                    if (elapsed > 0.1) {
+                        const ops = Math.round(current / elapsed);
+                        opsPerSecond.textContent = ops.toLocaleString();
+                        cpuLoad.textContent = Math.min(100, Math.round(ops / 10000));
                     }
                     
-                    // Create large typed array
-                    const nums = new Int32Array(5000);
-                    for (let n = 0; n < nums.length; n++) {
-                        nums[n] = (n * 1664525 + i) >>> 0;
-                    }
-                    
-                    // Create complex object
-                    const payloadObj = {
-                        index: i,
-                        tag: 'EXTRA_HEAVY_INIT',
-                        text: heavyText,
-                        binSample: binary.slice(0, 512),
-                        numbersSample: Array.from(nums.slice(0, 512)),
-                        timestamp: new Date().toISOString()
-                    };
-                    
-                    // Stringify and encode
-                    const payloadStr = JSON.stringify(payloadObj);
-                    const b64 = (typeof btoa === 'function')
-                        ? btoa(unescape(encodeURIComponent(payloadStr)))
-                        : (typeof Buffer !== 'undefined' ? Buffer.from(payloadStr).toString('base64') : '');
-                    
-                    // Log periodically to console
-                    if (i % Math.ceil(loopValue / 10) === 0) {
-                        console.log({ 
-                            index: i, 
-                            message: 'EXTRA-HEAVY init log', 
-                            size: payloadStr.length, 
-                            b64Preview: b64.slice(0, 60) 
-                        });
-                    }
-                }
-                
-                completedIterations = i;
-                
-                // Update progress
-                const percent = Math.floor((i / loopValue) * 100);
-                progressBar.style.width = percent + '%';
-                progressPercent.textContent = percent + '%';
-                
-                // Continue processing or finish
-                if (i < loopValue) {
-                    // Use setTimeout with dynamic delay based on chunk processing time
-                    const chunkTime = Date.now() - chunkStart;
-                    const delay = Math.max(1, Math.min(50, 100 - chunkTime)); // Adaptive delay
-                    setTimeout(processChunk, delay);
-                } else {
-                    // Test completed
-                    clearInterval(timerInterval);
-                    
-                    const totalElapsed = (Date.now() - startTime) / 1000;
-                    const performance = Math.round((loopValue / totalElapsed) / 1000);
-                    
-                    // Update results
-                    totalIterations.textContent = loopValue.toLocaleString();
-                    totalTime.textContent = `${elapsed}s`;
-                    performanceScore.textContent = performance;
-                    
-                    // Determine performance rating
-                    let rating = "Good";
-                    let ratingColor = "text-green-600";
-                    
-                    if (performance > 500) {
-                        rating = "Excellent";
-                        ratingColor = "text-purple-600";
-                    } else if (performance < 100) {
-                        rating = "Fair";
-                        ratingColor = "text-yellow-600";
-                    }
-                    
-                    resultText.innerHTML = `
-                        Completed <span class="font-bold">${loopValue.toLocaleString()}</span> iterations in 
-                        <span class="font-bold">${elapsed}</span> seconds.<br>
-                        Your device scored <span class="font-bold ${ratingColor}">${performance}</span> 
-                        (${rating} performance).
-                    `;
-                    
-                    // Update UI for completion
-                    progressBar.style.width = '100%';
-                    progressPercent.textContent = '100%';
-                    statusIndicator.classList.add('hidden');
-                    resultContainer.classList.remove('hidden');
-                    
-                    // Restore start button
-                    startBtn.disabled = false;
-                    startBtn.innerHTML = '<i class="fas fa-play-circle mr-2"></i> Run Test Again';
-                    startBtn.classList.add('pulse');
-                    
-                    // Add confetti effect
-                    createConfetti();
+                    testPhase.textContent = phase;
+                    lastUpdate = now;
                 }
             }
             
-            // Start processing
-            processChunk();
+            try {
+                // Phase 1: CPU Intensive Test
+                testPhase.textContent = 'Running CPU benchmark...';
+                updateProgress(0, iterations, 'CPU Test (Phase 1/3)');
+                
+                const cpuStart = performance.now();
+                const cpuResult = benchmark.performMathOperations(Math.floor(iterations * 0.6));
+                const cpuTime = (performance.now() - cpuStart) / 1000;
+                
+                updateProgress(Math.floor(iterations * 0.6), iterations, 'CPU Test Complete');
+                
+                // Phase 2: Memory Test
+                if (document.getElementById('memoryTest').checked) {
+                    testPhase.textContent = 'Running memory benchmark...';
+                    updateProgress(Math.floor(iterations * 0.6), iterations, 'Memory Test (Phase 2/3)');
+                    
+                    const memStart = performance.now();
+                    const memResult = benchmark.performMemoryOperations(Math.floor(iterations * 0.3));
+                    const memTime = (performance.now() - memStart) / 1000;
+                    
+                    updateProgress(Math.floor(iterations * 0.9), iterations, 'Memory Test Complete');
+                    
+                    benchmark.results.memoryScore = Math.round(10000 / (memTime + 1));
+                }
+                
+                // Phase 3: Multi-core Test
+                if (document.getElementById('multiCoreTest').checked) {
+                    testPhase.textContent = 'Running multi-core test...';
+                    updateProgress(Math.floor(iterations * 0.9), iterations, 'Multi-core Test (Phase 3/3)');
+                    
+                    const multiStart = performance.now();
+                    const multiResult = await benchmark.performMultiCoreTest(Math.floor(iterations * 0.1));
+                    const multiTime = (performance.now() - multiStart) / 1000;
+                    
+                    benchmark.results.multicoreScore = Math.round(Math.min(100, (deviceInfo.cores / 8) * 100));
+                }
+                
+                // Complete
+                updateProgress(iterations, iterations, 'Finalizing results...');
+                
+                // Calculate results
+                const totalTime = (performance.now() - startTime) / 1000;
+                const totalOps = iterations;
+                const opsPerSec = Math.round(totalOps / totalTime);
+                
+                benchmark.results.totalTime = totalTime;
+                benchmark.results.operationsPerSecond = opsPerSec;
+                benchmark.results.cpuScore = Math.round(10000 / (cpuTime + 1));
+                
+                // Calculate final score
+                const finalScore = benchmark.calculateScore(
+                    cpuTime, 
+                    benchmark.results.memoryTime || 0, 
+                    opsPerSec, 
+                    deviceInfo
+                );
+                
+                // Get rating
+                const rating = benchmark.getRating(finalScore);
+                
+                // Update UI with results
+                setTimeout(() => {
+                    showResults(finalScore, rating, totalOps, totalTime);
+                    benchmark.isRunning = false;
+                }, 500);
+                
+            } catch (error) {
+                console.error('Benchmark error:', error);
+                showError('Benchmark failed: ' + error.message);
+                benchmark.isRunning = false;
+            } finally {
+                // Reset button
+                startBtn.disabled = false;
+                startBtn.innerHTML = '<i class="fas fa-play-circle mr-2"></i> Run Benchmark Again';
+                startBtn.classList.add('pulse');
+                buttonShine.style.animation = '';
+            }
         });
+
+        // Show results
+        function showResults(score, rating, operations, time) {
+            progressContainer.classList.add('hidden');
+            resultContainer.classList.remove('hidden');
+            
+            // Animate score ring
+            const circumference = 339.292;
+            const offset = circumference - (score / 10000 * circumference);
+            scoreRing.style.strokeDashoffset = offset;
+            
+            // Animate score text
+            let currentScore = 0;
+            const scoreInterval = setInterval(() => {
+                currentScore += Math.ceil(score / 50);
+                if (currentScore >= score) {
+                    currentScore = score;
+                    clearInterval(scoreInterval);
+                }
+                scoreText.textContent = currentScore.toLocaleString();
+            }, 20);
+            
+            // Update result details
+            scoreText.textContent = score.toLocaleString();
+            cpuScore.textContent = benchmark.results.cpuScore + ' pts';
+            memoryScore.textContent = benchmark.results.memoryScore + ' pts';
+            multicoreScore.textContent = benchmark.results.multicoreScore + '%';
+            
+            // Animate bars
+            animateBar(cpuBar, benchmark.results.cpuScore / 100);
+            animateBar(memoryBar, benchmark.results.memoryScore / 100);
+            animateBar(multicoreBar, benchmark.results.multicoreScore / 100);
+            
+            totalIterations.textContent = operations.toLocaleString();
+            totalTime.textContent = time.toFixed(2) + 's';
+            
+            // Update rating
+            ratingIcon.innerHTML = `<i class="${rating.icon}"></i>`;
+            ratingTitle.textContent = rating.title;
+            ratingDescription.textContent = rating.description;
+            performanceRating.className = `mt-6 p-4 rounded-lg bg-gradient-to-r ${rating.color} text-white`;
+            performanceRating.classList.remove('hidden');
+            
+            // Add confetti for high scores
+            if (score >= 8000) {
+                createConfetti();
+            }
+        }
 
         // Helper functions
         function resetUI() {
             progressBar.style.width = '0%';
             progressPercent.textContent = '0%';
-            resultContainer.classList.add('hidden');
-            iterationsPerSecond.textContent = '0';
+            cpuLoad.textContent = '0';
+            opsPerSecond.textContent = '0';
+            timerValue.textContent = '0.00';
+            
+            // Reset result elements
+            cpuBar.style.width = '0%';
+            memoryBar.style.width = '0%';
+            multicoreBar.style.width = '0%';
+            scoreRing.style.strokeDashoffset = '339.292';
+        }
+
+        function animateBar(element, percentage) {
+            let width = 0;
+            const targetWidth = Math.min(100, percentage * 100);
+            const interval = setInterval(() => {
+                if (width >= targetWidth) {
+                    clearInterval(interval);
+                    return;
+                }
+                width += 2;
+                element.style.width = width + '%';
+            }, 20);
         }
 
         function showError(message) {
-            resultContainer.classList.remove('hidden');
-            resultTitle.textContent = "Error";
-            resultTitle.className = "text-lg font-semibold text-red-800";
-            resultText.innerHTML = `<span class="text-red-700">${message}</span>`;
+            const errorHtml = `
+                <div class="bg-gradient-to-r from-red-50 to-pink-50 border-l-4 border-red-500 p-4 rounded-r-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0 text-red-500 mt-1">
+                            <i class="fas fa-exclamation-circle text-xl"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-lg font-semibold text-red-800">Test Failed</h3>
+                            <div class="mt-1 text-red-700">
+                                <p>${message}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
             
-            // Change result container to error style
-            const resultDiv = resultContainer.querySelector('div');
-            resultDiv.className = "bg-gradient-to-r from-red-50 to-pink-50 border-l-4 border-red-500 p-4 rounded-r-lg";
+            progressContainer.classList.add('hidden');
+            resultContainer.innerHTML = errorHtml;
+            resultContainer.classList.remove('hidden');
         }
 
-        // Simple confetti effect
+        // Confetti effect
         function createConfetti() {
             const colors = ['#8E54E9', '#4776E6', '#4facfe', '#00f2fe', '#6a11cb'];
             
-            for (let i = 0; i < 50; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.cssText = `
-                    position: fixed;
-                    width: 10px;
-                    height: 10px;
-                    background-color: ${colors[Math.floor(Math.random() * colors.length)]};
-                    top: -20px;
-                    left: ${Math.random() * 100}vw;
-                    border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
-                    opacity: 0.8;
-                    z-index: 1000;
-                    pointer-events: none;
-                `;
-                
-                document.body.appendChild(confetti);
-                
-                // Animation
-                const animation = confetti.animate([
-                    { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
-                    { transform: `translateY(${window.innerHeight + 20}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
-                ], {
-                    duration: 1000 + Math.random() * 2000,
-                    easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
-                });
-                
-                animation.onfinish = () => confetti.remove();
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.cssText = `
+                        position: fixed;
+                        width: ${Math.random() * 10 + 5}px;
+                        height: ${Math.random() * 10 + 5}px;
+                        background-color: ${colors[Math.floor(Math.random() * colors.length)]};
+                        top: -20px;
+                        left: ${Math.random() * 100}vw;
+                        border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+                        opacity: 0.8;
+                        z-index: 1000;
+                        pointer-events: none;
+                        transform: rotate(${Math.random() * 360}deg);
+                    `;
+                    
+                    document.body.appendChild(confetti);
+                    
+                    const animation = confetti.animate([
+                        { 
+                            transform: `translateY(0) rotate(0deg)`, 
+                            opacity: 1 
+                        },
+                        { 
+                            transform: `translateY(${window.innerHeight + 50}px) rotate(${Math.random() * 720}deg)`, 
+                            opacity: 0 
+                        }
+                    ], {
+                        duration: 2000 + Math.random() * 3000,
+                        easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
+                    });
+                    
+                    animation.onfinish = () => confetti.remove();
+                }, i * 20);
             }
         }
+
+        // Add shine animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shine {
+                0% { transform: translateX(-100%) skewX(-15deg); }
+                100% { transform: translateX(200%) skewX(-15deg); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize
+        initDeviceInfo();
+        updateIterationLabel();
     </script>
 </body>
 </html>
